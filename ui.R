@@ -68,7 +68,9 @@ ui <- shinyUI(fluidPage(
                            max = NULL,
                            format = 'dd-mm-yyyy',
                            value = '2020-07-01'
-                 )
+                 ),
+                 downloadButton('downloadPlot1', label = "Download plot")
+
                  
                ),
                
@@ -106,7 +108,9 @@ ui <- shinyUI(fluidPage(
                                                                            "Effect of Public Awareness", "Effect of Full Lockdown", "Effect of Easter Weekend", 
                                                                            "Effect of post-Easter", "Effect of loosening lockdown", "Presymptomatic Period", "Incubation Period", "Length of Mild Infection",
                                                                            "Length of Asymptomatic Infection", "Length of ICU stay", "Length of Hospital Stay")),
-                             selected = 1)
+                             selected = 1),
+                 downloadButton('downloadPlot2', label = "Download plot")
+                 
                ),
                mainPanel(
                  plotOutput(outputId = "ParamPlot")

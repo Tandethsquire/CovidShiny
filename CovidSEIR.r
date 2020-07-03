@@ -1,5 +1,6 @@
 library(purrr)
 library(ggplot2)
+library(deSolve)
 
 ### Modelling Functions
 ## Set Up ODEs
@@ -66,7 +67,7 @@ GetSpread <- function(pars, Tmax, int_times, int_params, y0, t_initial = 0) {
   for (i in 1:(length(Tset)-1)) {
     param_vals <- getParams(pars, interventions[i])
     t = seq(from = Tset[i], to = Tset[i+1])
-    out <- deSolve::ode(y = initial_vals, times = t, func = SetOdes, parms = param_vals)
+    out <- ode(y = initial_vals, times = t, func = SetOdes, parms = param_vals)
     for (j in t){
       out_data[j+1-t_initial,] <- out[j-t[1]+1,]
     }

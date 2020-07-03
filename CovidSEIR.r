@@ -128,6 +128,7 @@ genResults <- function(points, input_names, times, end_time, out_names, desired_
     gammas <- unlist(p[grep('gamma.', names(p))], use.names = F)
     tryCatch(results_arr[,,i] <- as.matrix(GetSpread(params, end_time, int_times, gammas, initial_vals, start_time)),
              error = function(cond){
+               print(cond)
                print(p)
                stop("Couldn't solve differential equations: see above for details of point.")
              }

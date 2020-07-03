@@ -37,6 +37,8 @@ shinyServer <- function(input, output, session) {
     intervention <- list(time = as.numeric(input$intdate - as.Date('2020-01-30') + 1),
                                  strength = input$intStrength)
     
+    
+    
     end_time <- max(as.numeric(input$lastdate - as.Date('2020-01-30') + 1), intervention$time + 50)
     
     out_var <- c("S","I0","I1","I2","I3","D")[as.numeric(input$outvar)]
@@ -48,17 +50,29 @@ shinyServer <- function(input, output, session) {
     
     param_human_read <- c('Susceptible', 'Asymptomatic Cases', 'Mild Cases', 'Severe Cases', 'Critical Cases', 'Deaths')
     
-    results <- region_values(points = p,
+    results <- try(region_values(points = p,
                              fitting = p_dat,
                              region_name = names(region_fits)[choice],
                              param = out_var,
                              intervention = intervention,
-                             end_time = end_time)
-    ggplot(data = results, aes(x = t, y = mean)) +
+                             end_time = end_time))
+    validate(
+      need(length(results)>1,                     # it will only be 1 if it's a try-error
+           "Loading first plot...")
+    )
+    
+       
+    plot_out = ggplot(data = results, aes(x = t, y = mean)) +
               geom_ribbon(aes(ymin = lower, ymax = upper), fill = 'grey70') +
               geom_line(col = 'blue', lwd = 1.5) +
               labs(title = paste0(c(sub('\\.',' ',names(region_fits)[choice]), ": ", param_human_read[as.numeric(input$outvar)]), collapse = ""), x = 'Date', y = 'Frequency') +
               theme_minimal()
+    
+    
+    plot_out
+    
+    
+    
   })
   session$onSessionEnded(function() {
     stopApp()

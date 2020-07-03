@@ -5,6 +5,6 @@ account: tandethsquire
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2516488
-bundleId: 3330115
+bundleId: 3347962
 url: https://tandethsquire.shinyapps.io/covidshiny/
-when: 1593446052.62552
+when: 1593781842.54781

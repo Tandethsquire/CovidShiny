@@ -78,7 +78,7 @@ ui <- shinyUI(fluidPage(
                mainPanel(
             #     h1("Projected Case Numbers"),
                  # Output: ggplot
-                 plotOutput(outputId = "SEIRPlot"),
+                 plotOutput(outputId = "SEIRPlot", height = '800'),
                  p("This app uses data on cases and deaths in regions in the North East and Yorkshire to fit an SEIR model.
                    The cases data is taken from the ", a("ONS Cases", href = "https://coronavirus.data.gov.uk/"), " data, and the deaths data is taken from the",
                    a("NHS Deaths", href = "https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-daily-deaths/"), " data."),
@@ -113,7 +113,7 @@ ui <- shinyUI(fluidPage(
                  
                ),
                mainPanel(
-                 plotOutput(outputId = "ParamPlot")
+                 plotOutput(outputId = "ParamPlot", height = '800')
                )
              )
     ),

@@ -58,7 +58,7 @@ shinyServer <- function(input, output, session) {
                                  region_name = names(region_fits)[choice],
                                  param = out_var,
                                  intervention = intervention,
-                                 end_time = end_time))
+                                 end_time = end_time), silent = TRUE)
     validate(
       need(length(results)>1,                     # it will only be 1 if it's a try-error
            "Loading first plot...")

@@ -4,6 +4,7 @@ library(shiny)
 library(purrr)
 library(deSolve)
 library(ggplot2)
+library(shinyWidgets)
 
 load("region_fits.rda")
 load("region_data.rda")

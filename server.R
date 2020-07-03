@@ -21,10 +21,16 @@ shinyServer <- function(input, output, session) {
                            "Effect of post-Easter", "Effect of loosening lockdown", "Presymptomatic Period", "Incubation Period", "Length of Mild Infection",
                            "Length of Asymptomatic Infection", "Length of ICU stay", "Length of Hospital Stay")[as.numeric(input$param)]
     ggplot(data = data, aes(x = variable, y = value)) +
-      geom_boxplot() +
-      theme(axis.text.x = element_text(angle = 90)) +
-      labs(title = descriptive_param, x = "Location", y = names(region_params)[as.numeric(input$param)])
-  })
+      geom_boxplot(col = "#68246D", fill = "#CBA8B1", alpha = 0.2 ) +
+      theme_bw() +
+      theme(
+        plot.title = element_text(size=20, face="bold", colour = "#68246D"), 
+        axis.text.x = element_text(angle = 90, size=12),
+        axis.text.y = element_text(size=12),
+        axis.title = element_blank()) +
+      # labs(title = descriptive_param, x = "Location", y = names(region_params)[as.numeric(input$param)])
+      labs(title = descriptive_param, x = "Location", y = descriptive_param)
+    })
   
   output$actualGamma <- renderText({
     choice = as.numeric(input$region)
@@ -48,7 +54,7 @@ shinyServer <- function(input, output, session) {
     p <- region_fits[[choice]]
     p_dat <- region_data[[choice]]
     
-    param_human_read <- c('Susceptible', 'Asymptomatic Cases', 'Mild Cases', 'Severe Cases', 'Critical Cases', 'Deaths')
+    param_human_read <- c('Susceptible', 'Asymptomatic Cases', 'Mild Cases', 'Severe Cases', 'Critical Cases', 'Cumulative deaths')
     
     results <- try(region_values(points = p,
                              fitting = p_dat,
@@ -63,10 +69,17 @@ shinyServer <- function(input, output, session) {
     
        
     plot_out = ggplot(data = results, aes(x = t, y = mean)) +
-              geom_ribbon(aes(ymin = lower, ymax = upper), fill = 'grey70') +
-              geom_line(col = 'blue', lwd = 1.5) +
+              geom_path(aes(x=t, y=upper), col = "#CBA8B1", size = 1) +
+              geom_path(aes(x=t, y=lower), col = "#CBA8B1", size = 1) +
+              geom_ribbon(aes(ymin = lower, ymax = upper), fill="#CBA8B1", alpha=0.2) +
+              geom_line(col = "#68246D", lwd = 1.5) +
               labs(title = paste0(c(sub('\\.',' ',names(region_fits)[choice]), ": ", param_human_read[as.numeric(input$outvar)]), collapse = ""), x = 'Date', y = 'Frequency') +
-              theme_minimal()
+              theme_bw() + theme(
+                plot.title = element_text(size=20, face="bold", colour = "#68246D"),
+                axis.title = element_text(size=14),
+                axis.text = element_text(size=12)
+              )
+  
     
     
     plot_out

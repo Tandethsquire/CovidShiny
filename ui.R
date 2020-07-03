@@ -2,8 +2,25 @@
 
 ui <- shinyUI(fluidPage(
   
+  chooseSliderSkin("Modern", color = "#72246C"),
+  # tags$head(
+  #   tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.css"),
+  #   tags$style(type="text/css", "padding:10px;")
+  # ),
+  tags$style('.container-fluid {
+                             margin:10px;
+              }'),
   # App title ----
-  titlePanel("Covid SEIR - Regional Projection and Fitting"),
+  
+    titlePanel(
+    windowTitle = "Covid SEIR - Regional Projection and Fitting",
+    h2(
+      div(style="display:inline-block;",img(src="DULogo.png", height = 50,style="left;")),
+      div(style="display:inline-block;","Covid SEIR - Regional Projection and Fitting",style="padding-left:10px;font-weight:bold;")
+    )
+  ),
+  
+  
   tabsetPanel(
     tabPanel("Model",
              # Sidebar layout with input and output definitions ----
@@ -57,7 +74,7 @@ ui <- shinyUI(fluidPage(
                
                # Main panel for displaying outputs ----
                mainPanel(
-                 h1("Projected Case Numbers"),
+            #     h1("Projected Case Numbers"),
                  # Output: ggplot
                  plotOutput(outputId = "SEIRPlot"),
                  p("This app uses data on cases and deaths in regions in the North East and Yorkshire to fit an SEIR model.

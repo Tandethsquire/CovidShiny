@@ -41,14 +41,9 @@ ui <- shinyUI(fluidPage(
                  
                  textOutput('actualGamma'),
                  
-                 # Input: Slider for strength of intervention
-                 sliderInput(inputId = 'intStrength',
-                             label = 'Intervention Effect',
-                             min = 0,
-                             max = 1,
-                             value = 0.5
-                 ),
-                 
+# Slider for intervention strength - dealt with in server.R 
+                 uiOutput("intStrength_slider"),
+                  
                  # Input: Date selection for intervention
                  dateInput(inputId = "intdate",
                            label = "Intervention Date",
@@ -56,9 +51,7 @@ ui <- shinyUI(fluidPage(
                            max = NULL,
                            format = 'dd-mm-yyyy',
                            value = '2020-07-01'
-                 ),
-                 
-                 actionButton('runModel', "Run Model Output")
+                 )
                  
                ),
                

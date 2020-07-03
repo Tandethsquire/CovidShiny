@@ -1,10 +1,15 @@
 ## server file for Andy's SEIR shiny app
 shinyServer <- function(input, output, session) {
   
-  observeEvent(input$region, {
-    choice = as.numeric(input$region)
-    gamma = mean(region_fits[[choice]]$gamma5)
-    updateSliderInput(session = session, inputId = 'intStrength', value = gamma)
+  ## Alters intervention slider value on changing region
+
+  output$intStrength_slider <- renderUI({
+    sliderInput(inputId = 'intStrength', 
+                label = 'Intervention Effect',
+                min = 0, 
+                max = 1, 
+                value = mean(region_fits[[as.numeric(input$region)]]$gamma5)
+    )
   })
   
   output$ParamPlot <- renderPlot({
@@ -28,17 +33,16 @@ shinyServer <- function(input, output, session) {
   
   output$SEIRPlot <- renderPlot({
     
-    input$runModel
+ 
+    intervention <- list(time = as.numeric(input$intdate - as.Date('2020-01-30') + 1),
+                                 strength = input$intStrength)
     
-    intervention <- isolate(list(time = as.numeric(input$intdate - as.Date('2020-01-30') + 1),
-                                 strength = input$intStrength))
+    end_time <- max(as.numeric(input$lastdate - as.Date('2020-01-30') + 1), intervention$time + 50)
     
-    end_time <- isolate(max(as.numeric(input$lastdate - as.Date('2020-01-30') + 1), intervention$time + 50))
+    out_var <- c("S","I0","I1","I2","I3","D")[as.numeric(input$outvar)]
     
-    out_var <- isolate(c("S","I0","I1","I2","I3","D")[as.numeric(input$outvar)])
-    
-    choice <- isolate(as.numeric(input$region))
-    
+## This isolate needs to be here to stop the plot updating on changing input$region    
+    isolate(choice <- as.numeric(input$region))
     p <- region_fits[[choice]]
     p_dat <- region_data[[choice]]
     
@@ -50,11 +54,11 @@ shinyServer <- function(input, output, session) {
                              param = out_var,
                              intervention = intervention,
                              end_time = end_time)
-    isolate(ggplot(data = results, aes(x = t, y = mean)) +
+    ggplot(data = results, aes(x = t, y = mean)) +
               geom_ribbon(aes(ymin = lower, ymax = upper), fill = 'grey70') +
               geom_line(col = 'blue', lwd = 1.5) +
               labs(title = paste0(c(sub('\\.',' ',names(region_fits)[choice]), ": ", param_human_read[as.numeric(input$outvar)]), collapse = ""), x = 'Date', y = 'Frequency') +
-              theme_minimal())
+              theme_minimal()
   })
   session$onSessionEnded(function() {
     stopApp()

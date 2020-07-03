@@ -2,6 +2,8 @@
 
 ui <- shinyUI(fluidPage(
   
+  withMathJax(),
+  
   chooseSliderSkin("Modern", color = "#72246C"),
   # tags$head(
   #   tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.css"),
@@ -120,26 +122,39 @@ ui <- shinyUI(fluidPage(
     tabPanel('Model Description',
              mainPanel(
                h1("Model Description"),
-               p("The model run is a modified SEIR model, with stratification of the Exposed (E) and Infected (I) classes.
+               p("The model run is a modified SEIR model, with stratification of the Exposed (\\(E\\)) and Infected (\\(I\\)) classes.
           The length of time spent in the E class corresponds to the incubation period of the disease: during the
-          incubation period, a person can be incubating (E0) or presymptomatic (E1). The I class is split by severity
-          or type of illness: asymptomatic cases correspond to I0, those with a mild infection to I1, those whose
-          symptoms are serious enough to warrant hospital care to I2, and those who would be expected to require
-          ICU treatment to I3."),
-               HTML("<center><img src = 'SEIRModel.png', height = 500, width = 750 alt = 'Model diagram'></center>"),
+          incubation period, a person can be incubating (\\(E_0\\)) or presymptomatic (\\(E_1\\)). The \\(I\\) class is split by severity
+          or type of illness: asymptomatic cases correspond to \\(I_0\\), those with a mild infection to \\(I_1\\), those whose
+          symptoms are serious enough to warrant hospital care to \\(I_2\\), and those who would be expected to require
+          ICU treatment to \\(I_3\\)."),
+               HTML("<center><img src = 'SEIRModel.png', height = 500, width = 750, alt = 'Model diagram'></center>"),
                p("The parameters displayed in the transitions are the parameters used to run the model, converted from
           more physical parameters (such as pre-symptomatic period, length of hospital stay, etc.). For example, the
-          length of incubation period is related to these parameters as 1/alpha1 + 1/alpha2. The transmission of the
-          disease from infected to susceptible members of the population can occur from any of E1, I0, I1, I2, or I3,
+          length of incubation period is related to these parameters as \\(\\frac{1}{\\alpha_1} + \\frac{1}{\\alpha_2}\\). The transmission of the
+          disease from infected to susceptible members of the population can occur from any of \\(E_1,\\,I_0,\\,I_1,\\,I_2\\), or \\(I_3\\),
           each with their own transmission rates."),
                p("In the absence of spatial structure in the model, the effect of lockdown or interventions is treated as a blanket effect on
           the transmission rates - if, for instance, lockdown reduced the amount of contact an average person has to 50% of the
           pre-Covid amount, the transmission parameters would be halved. This does not apply to those people who are in hospital
-          with the disease (the transmission from I2 and I3 does not change)."),
+          with the disease (the transmission from \\(I_2\\) and \\(I_3\\) does not change)."),
                h2("Fitting"),
-               p("Given the cases and deaths data for each region, the space of possible parameter values was explored and compared to
+               p("Given the cases and deaths data for each region, the space of possible parameter values was explored and matched against
           cases and deaths at time-points spaced 7 days apart, from the first incidence of cases in the region. The best 100
-          candidate points are used to produce the model runs plotted. The observations used conclude on the 16th June.")
+          candidate points are used to produce the model runs plotted. The observations used conclude on the 16th June, giving an initial
+                 picture of the effect of the gradual relaxation of lockdown beginning on 1st June."),
+               p("The first plot provides the expected output of the 100 runs: a weighted mean is applied, where the weighting is
+                 determined by how close a fit to the data each point is, and confidence intervals are given by a similarly weighted standard
+                 deviation across the runs. The second plot gives, for each input parameter, the range of fitted values for each region, as
+                 a set of box plots. This can therefore be used in two ways:"),
+               tags$ul(
+                 tags$li("To examine the possible trajectory of cases and deaths into the future, allowing for uncertainty: an additional
+                         intervention parameter can be instituted to reflect local lockdowns or relaxation to compare qualitative impact;"),
+                 tags$li("To compare the effect the epidemic has had on regions, by examining the difference in parameter fits for those regions")
+               ),
+               div("Warning: Remember that finding", tags$i("a"), "fit to data is not the same as finding the true realisation of the
+                 epidemic - care should be taken when using specific output values given by the model, or specific numerical differences
+                 between regions, especially if forecasting.", style = 'font-weight: bold; color:red; border: 1px solid black; background-color: yellow; text-align: center')
              )
     )
              )

@@ -5,6 +5,7 @@ library(purrr)
 library(deSolve)
 library(ggplot2)
 library(shinyWidgets)
+library(markdown)
 
 load("region_fits.rda")
 load("region_data.rda")

@@ -26,7 +26,8 @@ shinyServer <- function(input, output, session) {
         axis.text.y = element_text(size=12),
         axis.title = element_blank()) +
       # labs(title = descriptive_param, x = "Location", y = names(region_params)[as.numeric(input$param)])
-      labs(title = descriptive_param, x = "Location", y = descriptive_param)
+      labs(title = descriptive_param, x = "Location", y = descriptive_param)+coord_flip() +
+      scale_y_continuous(sec.axis = dup_axis())
     
   })
   output$ParamPlot <- renderPlot({
